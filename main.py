@@ -7,8 +7,14 @@ pygame.init()
 
 ## Loading Resources
 background = screencontroller.loadImage("Resources/Images/background.jpg")
+background = pygame.transform.scale(background, (1280, 780))
+toggleMapNotification = screencontroller.loadImage("Resources/Images/tpmvn.png")
+toggleMapNotification = pygame.transform.scale(toggleMapNotification, (230, 80))
 gameIcon = screencontroller.loadImage("Resources/Images/game_icon_tag.png")
 italianFlagImage = screencontroller.loadImage("Resources/Images/italian_flag.png")
+vectorialMap = screencontroller.loadImage("Resources/Images/vectorial-map.png")
+vectorialMap = pygame.transform.scale(vectorialMap, (1250, 750))
+italianFlagImage = pygame.transform.scale(italianFlagImage, (88, 88))
 italianFascistLeader = screencontroller.loadImage("Resources/Images/italian_fascist_leader.jpg")
 clock = pygame.time.Clock()
 
@@ -16,31 +22,35 @@ clock = pygame.time.Clock()
 ## Transforming Resources in passable classes.
 
 gameIconReference = screencontroller.makeInstanceReference(gameIcon, 0, 0)
-italianFlagImageReference = screencontroller.makeInstanceReference(italianFlagImage, 100, 120)
-italianFascistLeaderReference = screencontroller.makeInstanceReference(italianFascistLeader, 100, 120)
-backgroundReference = screencontroller.makeInstanceReference(background, 0, 0)
+italianFlagImageReference = screencontroller.makeInstanceReference(italianFlagImage, 10, 680, "Italian Flag Bottom")
+italianFascistLeaderReference = screencontroller.makeInstanceReference(italianFascistLeader, 100, 120, "italian Leader Image")
+backgroundReference = screencontroller.makeInstanceReference(background, 0, 0, "Background Image")
+toggleMapReference = screencontroller.makeInstanceReference(toggleMapNotification, 1050, 10, "Toggle Map Notification")
+vectorialMapReference = screencontroller.makeInstanceReference(vectorialMap, 25, -15, "Vectorial Map")
 
 ## Inserting Resources into Game without Updating Screen
 screencontroller.insertBackground(backgroundReference)
 
 ## Adjustments to the game window
 screencontroller.setIcon(gameIconReference)
-screencontroller.addCaption("Tight and Decide [1920x1080]")
-classEditor.changeName(backgroundReference, "Peppino non Mangia Carote")
+screencontroller.addCaption("Tight and Decide [1280x728]")
+classEditor.changeName(backgroundReference, "Background")
+screencontroller.drawImage(italianFlagImageReference)
+
 
 ## Game cycle.
 running = True
 clicked = False 
 type_ = 0 
-
+isMapChanged = False
 
 while running:
-    clock.tick(60)
+    clock.tick(10)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
     
-    if not clicked: screencontroller.drawImage(italianFlagImageReference)
+
     
     screencontroller.updateDisplay()
     ## Mouse Button Press
@@ -48,27 +58,15 @@ while running:
     
     if middle:
         screencontroller.fixedInfoDisplay()
-        clock.tick(2)
-
-    if left:
-        screencontroller.makeFont(
-            "Verdana",
-            14,
-            "This is a text that was created with your left click!",
-            False,
-            False,
-            (234, 45, 65),
-            100,
-            100,
-            backgroundReference
-            )
-        classEditor.changeName(backgroundReference, "Peppino Mangia Carote")
-        clock.tick(5)
-
-    else:
-        continue
-
-        
-
+    
+    if right:
+        if not isMapChanged:
+            isMapChanged = True
+            screencontroller.drawImage(vectorialMapReference)
+            screencontroller.drawImage(toggleMapReference)
+        else:
+            isMapChanged = False
+            screencontroller.drawImage(backgroundReference)
+            
 
 pygame.quit()
