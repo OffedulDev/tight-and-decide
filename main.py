@@ -1,32 +1,42 @@
 import pygame
+from pygame.version import PygameVersion
 import screencontroller
-import update_objects
-
 
 pygame.init()
 
-background = pygame.image.load("Resources/Images/background.jpg")
-background = pygame.transform.scale(background, (1280, 720))
-italian_flag_image = pygame.image.load("Resources/Images/italian_flag.png")
-italian_flag_image = pygame.transform.scale(italian_flag_image, (340, 230))
+## Loading Resources
+background = screencontroller.loadImage("Resources/Images/background.jpg")
+gameIcon = screencontroller.loadImage("Resources/Images/game_icon_tag.png")
+italianFlagImage = screencontroller.loadImage("Resources/Images/italian_flag.png")
+italianFascistLeader = screencontroller.loadImage("Resources/Images/italian_fascist_leader.jpg")
 
 
-testFont = screencontroller.makeFont("Verdana", 14, True, True)
-renderFont = screencontroller.returnRenderedFont(testFont, "Test Font")
-screencontroller.insertObject(background, 0, 0)
-screencontroller.insertObject(italian_flag_image, 430, 0)
-count = 0 
 
-while True:
-    print(count)
-    if count == 1200:
-        renderFont = screencontroller.returnRenderedFont(testFont, "Another test font!")
-        count += 1
-        update_objects.insert_and_update_object(renderFont, 430, 100)
-    count += 1
-    
-    screencontroller.FlipScreen()
+## Transforming Resources in passable classes.
+
+gameIconReference = screencontroller.makeInstanceReference(gameIcon, 0, 0)
+italianFlagImageReference = screencontroller.makeInstanceReference(italianFlagImage, 100, 120)
+italianFascistLeaderReference = screencontroller.makeInstanceReference(italianFascistLeader, 100, 120)
+backgroundReference = screencontroller.makeInstanceReference(background, 0, 0)
+
+## Inserting Resources into Game without Updating Screen
+screencontroller.insertBackground(backgroundReference)
+
+## Adjustments to the game window
+screencontroller.setIcon(gameIconReference)
+screencontroller.addCaption("Tight and Decide [1920x1080]")
+
+## Game cycle.
+running = True
+
+while running:
     for event in pygame.event.get():
-        if event.type==pygame.QUIT:
-            pygame.quit()
-            exit(0)
+        if event.type == pygame.QUIT:
+            running = False
+
+    
+
+    screencontroller.updateDisplay()
+
+
+pygame.quit()
