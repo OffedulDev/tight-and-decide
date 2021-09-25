@@ -19,6 +19,10 @@ last_edit = InstanceReference("NLE", 0, 0)
 def getScreen():
     return screen
 
+def returnSurface(sizeX, sizeY):
+    return pygame.Surface((sizeX, sizeY))
+
+
 def fixedInfoDisplay():
     for m in objects:
         if isinstance(m, InstanceReference):
@@ -35,7 +39,6 @@ def makeFont(font_name="Verdana", font_size=14, text="Failed to pass text", bold
 
     if last_edit == fontClass:
         objects.pop(objects.index(last_edit))
-        insert
         objects.append(fontClass)
         last_edit = fontClass
         if isinstance(actual_bg, InstanceReference): insertBackground(actual_bg)
